@@ -10,7 +10,7 @@ type InputProps = {
     return (
       <>
         {label && (
-          <label htmlFor={id} className="mb-2 md:mb-0 2xl:mb-2">
+          <label htmlFor={id} className="mb-2">
             {label}
           </label>
         )}

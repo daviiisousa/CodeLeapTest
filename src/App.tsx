@@ -5,7 +5,7 @@ import { PageNotFound } from "./pages/PageNotFound";
 
 export function App() {
   return (
-    <main className="font-primary bg-background h-screen">
+    <main className="font-primary bg-background h-full min-h-screen">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignUp />} />
