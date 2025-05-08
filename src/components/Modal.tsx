@@ -13,7 +13,7 @@ export function Modal({ children }: ModalProps) {
             transition={{ duration: 0.3 }}
             className="bg-secondary/80 w-screen h-screen z-10 fixed inset-0 flex justify-center items-center "
         >
-            <div className="border p-6 rounded-2xl border-line bg-white w-1/2">
+            <div className="border p-6 rounded-2xl border-line bg-white w-2/3">
                 {children}
             </div>
         </motion.div>

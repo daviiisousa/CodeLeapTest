@@ -18,7 +18,7 @@ export function SignUp() {
     }
 
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex items-center justify-center h-screen mx-5 sm:m-0">
             <ToastContainer />
             <div className="bg-white rounded-2xl p-6 border border-terciary w-[500px]">
                 <h1 className="font-bold text-title mb-6">Welcome to CodeLeap network!</h1>
