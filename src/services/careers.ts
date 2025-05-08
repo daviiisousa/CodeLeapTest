@@ -1,3 +1,4 @@
+import type { FormEvent } from "react";
 import api from "../api/instace";
 import type { CareerForm } from "../types/global";
 
@@ -7,6 +8,7 @@ export async function getCareers() {
     return response.data 
   } catch (error) {
     console.error(error);
+    throw new Error("Erro ao buscar usuarios")
   }
 }
 
@@ -17,15 +19,18 @@ export async function postCareers({username, content, title}: CareerForm) {
     return response.data
   } catch (error) {
     console.error(error)
+    throw new Error("Erro ao postar")
   }
 }
 
-export async function editCareers(id: number){
+export async function editCareers(event: FormEvent, id: number, title: string, content: string){
   try {
-    const response = await api.patch(`/${id}/`, {})
+    event.preventDefault()
+    const response = await api.patch(`/${id}/`, {title, content})
     return response.data
   } catch (error) {
     console.error(error)
+    throw new Error("Erro ao Editar")
   }
 }
 
@@ -34,5 +39,6 @@ export async function deleteCareers(id: number ){
     await api.delete(`/${id}/`)
   } catch (error) {
     console.error(error)
+    throw new Error("Erro ao deletar")
   }
 }
