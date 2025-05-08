@@ -162,7 +162,7 @@ export function Home() {
                       {getMinutesFromNow(career.created_datetime)} minutes ago
                     </p>
                   </div>
-                  <p className="text-xl mt-4 ">{career.content}</p>
+                  <p className="text-xl mt-4 max-w-ful break-words">{career.content}</p>
                 </div>
               </div>
             ))
