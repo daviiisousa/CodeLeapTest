@@ -1,7 +1,11 @@
-export type Careers = {
-    id?: number;
+export type CareerForm = {
     username: string;
     title: string;
     content: string;
-    created_datetime?: string | date;
-}
+  };
+  
+export type Career = CareerForm & {
+    id: number;
+    created_datetime: string ;
+  };
+  

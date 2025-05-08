@@ -16,7 +16,7 @@ type InputProps = {
         )}
         <input
           id={id}
-          className={clsx("p-2 rounded-lg border border-secondary placeholder:text-terciary", className)}
+          className={clsx("p-2 rounded-lg border border-secondary placeholder:text-terciary focus:outline-none focus:ring-1 focus:ring-primary", className)}
           {...props}
         />
       </>

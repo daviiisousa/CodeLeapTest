@@ -1,19 +1,30 @@
 import React, { useEffect } from "react";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
-import { getCareers, postCareers } from "../services/careers";
-import type { Careers } from "../types/global";
+import { deleteCareers, getCareers, postCareers } from "../services/careers";
+import type { Career } from "../types/global";
 import { getMinutesFromNow } from "../utils/getMinutesFromNow";
+import trash from "../assets/trash.svg"
+import edit from "../assets/edit.svg"
+import { Modal } from "../components/Modal";
+import { AnimatePresence } from "framer-motion";
 
 export function Home() {
     const [content, setContent] = React.useState("")
     const [title, setTitle] = React.useState("")
-    const [careers, setCareers] = React.useState<Careers[]>([])
+    const [careers, setCareers] = React.useState<Career[]>([])
+    const [modalDelete, setmodalDelete] = React.useState(false)
+    const [modalEdit, setModalEdit] = React.useState(false)
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-
         postCareers({ username: "user", content, title })
+        setContent("")
+        setTitle("")
+    }
+
+    async function handleDelete(id: number) {
+        deleteCareers(id)
     }
 
     useEffect(() => {
@@ -21,6 +32,7 @@ export function Home() {
             const data = await getCareers()
             setCareers(data.results)
         }
+
         fetchData()
     }, [])
 
@@ -63,19 +75,35 @@ export function Home() {
                         Create
                     </Button>
                 </form>
+
                 <div className="my-6">
                     {careers.length > 0 ?
-                        careers.map((career, index) => (
+                        careers.map((career) => (
                             <div
                                 className="my-6"
-                                key={index}
+                                key={career.id}
                             >
-                                <h2
-                                    className="text-title font-bold text-white bg-primary p-6 
-                                    rounded-t-2xl "
-                                >
-                                    {career.title}
-                                </h2>
+                                <div className="bg-primary p-6 rounded-t-2xl flex justify-between items-center">
+                                    <h2
+                                        className="text-title font-bold text-white "
+                                    >
+                                        {career.title}
+                                    </h2>
+                                    <div className="flex items-center gap-6">
+                                        <button
+                                            className="cursor-pointer"
+                                            onClick={() => setmodalDelete(!modalDelete)}
+                                        >
+                                            <img src={trash} alt="trash" />
+                                        </button>
+                                        <button
+                                            className="cursor-pointer"
+                                            onClick={() => setModalEdit(!modalEdit)}
+                                        >
+                                            <img src={edit} alt="edit" />
+                                        </button>
+                                    </div>
+                                </div>
                                 <div className="border border-line p-6 rounded-b-xl">
                                     <div className="flex justify-between">
                                         <p className="font-bold text-xl text-secondary">
@@ -89,7 +117,82 @@ export function Home() {
                                         {career.content}
                                     </p>
                                 </div>
+                                <AnimatePresence>
+                                    {modalDelete &&
+                                        <Modal>
+                                            <h2 className="text-title font-bold mb-10">
+                                                Are you sure you want to delete this item?
+                                            </h2>
+                                            <div className="flex flex-col sm:flex-row items-center gap-4 justify-end ">
+                                                <button
+                                                    type="reset"
+                                                    className="text-black border border-line px-7 py-1.5 rounded-lg font-bold cursor-pointer w-full sm:w-auto hover:bg-secondary hover:text-white transition"
+                                                    onClick={() => setmodalDelete(!modalDelete)}
+
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    className="bg-delete px-7 py-1.5 text-white font-bold rounded-lg cursor-pointer hover:bg-delete/80 w-full sm:w-auto transition"
+                                                    onClick={() => handleDelete(career.id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </Modal>
+                                    }
+                                </AnimatePresence>
+                                <AnimatePresence>
+                                    {modalEdit &&
+                                        <Modal>
+                                            <h2
+                                                className="text-title font-bold mb-6"
+                                            >
+                                                Edit item
+                                            </h2>
+                                            <form
+                                                className="flex flex-col "
+                                            >
+                                                <Input
+                                                    label="Title"
+                                                    type="text"
+                                                    id="Title"
+                                                    placeholder="Hello world"
+                                                    value={title}
+                                                    className="mb-6"
+                                                />
+                                                <Input
+                                                    label="Content"
+                                                    id="content"
+                                                    placeholder="Content here"
+                                                    type="text"
+                                                    value={content}
+                                                    className="pt-[7px] pb-[51px] pl-2.5 mb-6"
+                                                />
+                                                <div 
+                                                    className="flex flex-col sm:flex-row items-center gap-4 justify-end"
+                                                >
+                                                    <button
+                                                        type="reset"
+                                                        className="text-black border border-line px-7 py-1.5 rounded-lg font-bold cursor-pointer w-full sm:w-auto hover:bg-secondary hover:text-white transition"
+                                                        onClick={() => setModalEdit(!modalEdit)}
+
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                    className="bg-save px-7 py-1.5 text-white font-bold rounded-lg cursor-pointer hover:bg-save/80 w-full sm:w-auto transition"
+                                                    
+                                                >
+                                                    Delete
+                                                </button>
+                                                </div>
+                                            </form>
+                                        </Modal>
+                                    }
+                                </AnimatePresence>
                             </div>
+
                         )) : (
                             <h1>vazio</h1>
                         )
